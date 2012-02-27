@@ -3,9 +3,8 @@
  */
 package tests;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import code.Counter;
 import static org.mockito.Mockito.*;
@@ -18,32 +17,41 @@ import static org.mockito.Mockito.*;
 public class CounterTest {
 
 	@Test
-	public void test() {
-		
-		Integer first,mockedFirst;
-		Integer second,mockedSecond;
-		
-		Counter count = new Counter();
-		
+	public void test1() {
+		// Testing in order with only one object
+				
+		// Mocked object
 		Counter mockedCounter = mock(Counter.class);
-		when(mockedCounter.getValue(1)).thenReturn(1).thenReturn(2);
-		when(mockedCounter.getValue(2)).thenReturn(2).thenReturn(4);
 		
-		first = count.getValue(1);
-		second = count.getValue(2);
-		mockedFirst = mockedCounter.getValue(1);
-		mockedSecond = mockedCounter.getValue(2);
-		
-		assertEquals("First first wronge Answer !",first , mockedFirst);
-		assertEquals("First second Wronge Answer !",second , mockedSecond);
-		
-		first = count.getValue(1);
-		second = count.getValue(2);
-		mockedFirst = mockedCounter.getValue(1);
-		mockedSecond = mockedCounter.getValue(2);
+		// Four mock object invocations
+		mockedCounter.getValue(1);
+		mockedCounter.getValue(2);
 
-		assertEquals("Second first Answer !",first , mockedFirst);
-		assertEquals("Second second Answer !",second , mockedSecond);
+		// created an in order verifier for mockedCounter 
+		InOrder inOrder = inOrder(mockedCounter);	
+
+		inOrder.verify(mockedCounter).getValue(1);
+		inOrder.verify(mockedCounter).getValue(2);
+		
+	}
+
+	@Test
+	public void test2() {
+		// Testing in order with only one object
+				
+		// Two mocked objects
+		Counter mockedCounter1 = mock(Counter.class);
+		Counter mockedCounter2 = mock(Counter.class);
+		
+		// Four mock object invocations
+		mockedCounter1.getValue(1);
+		mockedCounter2.getValue(2);
+
+		// created an in order verifier for mockedCounter1 and mockedCounter2
+		InOrder inOrder = inOrder(mockedCounter1,mockedCounter2);	
+
+		inOrder.verify(mockedCounter1).getValue(1);
+		inOrder.verify(mockedCounter2).getValue(2);
 		
 	}
 
